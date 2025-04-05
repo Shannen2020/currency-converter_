@@ -146,4 +146,48 @@ describe('CurrencyConverter Component', () => {
         expect(screen.getByText("JPY")).toBeInTheDocument()
         expect(screen.getByText("20")).toBeInTheDocument() // weird
     })
+
+    //exercise 6
+
+    it("should handle negative inputs",()=>{
+
+        // Arrange
+        render (
+            <CurrencyContext.Provider value={{
+                fromCurrency: "SGD",
+                toCurrency: "USD"
+            }}>
+                <CurrencyConverter />
+                </CurrencyContext.Provider>
+                )
+        
+        //Act
+        const AmountUpdated = screen.getByPlaceholderText("Enter amount")
+        fireEvent.change(AmountUpdated, { target: { value:"-10" } } )
+
+        // Assert
+        // expect(screen.getByText("-20")).toBeInTheDocument() // edge case failed
+        expect(screen.getByText("0")).toBeInTheDocument()
+    })
+
+    // another edge case
+    it("should handle non-number inputs",()=>{
+        // Arrange
+        render (
+            <CurrencyContext.Provider value={{
+                fromCurrency: "SGD",
+                toCurrency: "USD"
+            }}>
+                <CurrencyConverter />
+                </CurrencyContext.Provider>
+                )
+        
+        //Act
+        const AmountUpdated = screen.getByPlaceholderText("Enter amount")
+        fireEvent.change(AmountUpdated, { target: { value:"abc" } } )
+
+        // Assert
+        // expect(screen.getByText("NaN")).toBeInTheDocument() // edge case failed
+        expect(screen.getByText("0")).toBeInTheDocument() // edge case failed
+    })
  
